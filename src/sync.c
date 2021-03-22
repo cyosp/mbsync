@@ -1263,20 +1263,12 @@ box_confirmed2( sync_vars_t *svars, int t )
 					 * temorarily cannot be opened for some weird reason (while the stores can). */
 					delete_state( svars );
 				}
-			  done:
-				sync_bail( svars );
-				break;
 			}
 			if (svars->existing) {
 				if (!(svars->chan->ops[1-t] & OP_REMOVE)) {
 					error( "Error: channel %s: %s box %s cannot be opened.\n",
 					       svars->chan->name, str_fn[t], svars->orig_name[t] );
 					goto bail;
-				}
-				if (svars->drv[1-t]->confirm_box_empty( svars->ctx[1-t] ) != DRV_OK) {
-					warn( "Warning: channel %s: %s box %s cannot be opened and %s box %s is not empty.\n",
-					      svars->chan->name, str_fn[t], svars->orig_name[t], str_fn[1-t], svars->orig_name[1-t] );
-					goto done;
 				}
 				info( "Deleting %s box %s...\n", str_fn[1-t], svars->orig_name[1-t] );
 				svars->drv[1-t]->delete_box( svars->ctx[1-t], box_deleted, INV_AUX );
