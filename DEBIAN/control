@@ -1,0 +1,9 @@
+Package: mbsync
+Version: 0.0.0-0
+Section: mail
+Priority: optional
+Architecture: armhf
+Depends: libsasl2-2, libc6, libdb5.3, libssl1.1, zlib1g
+Maintainer: CYOSP
+Description: Mailbox synchronization program
+Homepage: http://www.cyosp.com

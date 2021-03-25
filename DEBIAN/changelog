@@ -1,0 +1,5 @@
+mbsync (1.4.1.0) stable; urgency=low
+
+  * OP_REMOVE: Force remove maildir even if remote cannot be opened and local is not empty
+
+ -- CYOSP <cyosp@cyosp.com>  Sun, 28 Mar 2021 09:00:00 +0200
