@@ -1,4 +1,4 @@
-AC_INIT([mbsync], [1.4.1])
+AC_INIT([mbsync], [0.0.0])
 AC_CONFIG_HEADERS([autodefs.h])
 
 AC_CANONICAL_TARGET
