@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PKG_NAME="mbsync"
-DEBIAN_VERSIONS="buster"
+DEBIAN_VERSIONS="bullseye"
 
 set -e
 
@@ -32,8 +32,8 @@ do
 
     PACKAGE_VERSION="$VERSION-0+deb"
     case $version in
-      buster)
-        PACKAGE_VERSION+="10"
+      bullseye)
+        PACKAGE_VERSION+="11"
       ;;
     esac
     PACKAGE_VERSION+="u0"
