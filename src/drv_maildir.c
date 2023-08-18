@@ -1380,6 +1380,51 @@ maildir_confirm_box_empty( store_t *gctx )
 	return ctx->total_msgs ? DRV_BOX_BAD : DRV_OK;
 }
 
+
+int remove_directory(const char *path) {
+   DIR *d = opendir(path);
+   size_t path_len = strlen(path);
+   int r = -1;
+
+   if (d) {
+      struct dirent *p;
+
+      r = 0;
+      while (!r && (p=readdir(d))) {
+          int r2 = -1;
+          char *buf;
+          size_t len;
+
+          /* Skip the names "." and ".." as we don't want to recurse on them. */
+          if (!strcmp(p->d_name, ".") || !strcmp(p->d_name, ".."))
+             continue;
+
+          len = path_len + strlen(p->d_name) + 2;
+          buf = malloc(len);
+
+          if (buf) {
+             struct stat statbuf;
+
+             snprintf(buf, len, "%s/%s", path, p->d_name);
+             if (!stat(buf, &statbuf)) {
+                if (S_ISDIR(statbuf.st_mode))
+                   r2 = remove_directory(buf);
+                else
+                   r2 = unlink(buf);
+             }
+             free(buf);
+          }
+          r = r2;
+      }
+      closedir(d);
+   }
+
+   if (!r)
+      r = rmdir(path);
+
+   return r;
+}
+
 static void
 maildir_delete_box( store_t *gctx,
                     void (*cb)( int sts, void *aux ), void *aux )
@@ -1411,7 +1456,7 @@ maildir_delete_box( store_t *gctx,
 		 * That way an interrupted operation can be resumed. */
 		for (i = 3; --i >= 0; ) {
 			memcpy( buf + bl, subdirs[i], 4 );
-			if (rmdir( buf ) && errno != ENOENT) {
+			if (remove_directory( buf ) && errno != ENOENT) {
 			  badrm:
 				sys_error( "Maildir error: cannot remove '%s'", buf );
 				ret = DRV_BOX_BAD;
